@@ -33,3 +33,61 @@ using annotation for springboot project request body, request parameter, path pa
 - 枚举：取值有效性校验
 - 分组校验（同一参数对于不同的接口来说校验规则不同）
 
+## 参数校验
+
+Java开发者在Java API规范 (JSR303) 定义了Bean校验的标准validation-api，但没有提供实现。
+
+引入依赖：`jakarta.validation:jakarta.validation-api:3.0.2`
+
+提供的注解：
+- AssertFalse, AssertTrue
+- DecimalMax, DecimalMin
+- Digits
+- Email
+- Future, FutureOrPresent, Past, PastOrPresent
+- Max, Min
+- Negative, NegativeOrZero, Positive, PositiveOrZero
+- NotNull, Null, NotEmpty, NotBlank
+- Size
+
+### hibernate validation
+
+hibernate validation是对这个规范的实现，并增加了校验注解如@Email、@Length等。
+
+引入依赖：`org.hibernate.validator:hibernate-validator`
+
+
+### Spring的实现
+
+Spring Validation是对hibernate validation的二次封装，用于支持spring mvc参数自动校验。
+
+### 分组校验
+区分场景校验，不同场景的校验规则不同，创建用户id必须为null，更新用户id不能为null
+@Valid不再适用，只能用@Validated
+
+### 枚举类校验
+
+@ValueOfEnum：校验string可以转换为指定的枚举类
+
+### 跨字段校验
+
+@PasswordValid：校验两次密码一致
+
+### @Valid注解不生效
+
+引入：`org.springframework.boot:spring-boot-starter-validation`
+
+### 自定义的校验无法返回将异常信息封装到BindingResult，从而导致全局异常处理器拿不到校验失败信息
+
+todo
+
+## 启动
+
+启动mysql
+```bash
+docker run --name mysql8.1 \
+-p 3306:3306 \
+-e MYSQL_ROOT_PASSWORD=p@ssw0rd \
+-d mysql:8.1.0 \
+--character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+```
