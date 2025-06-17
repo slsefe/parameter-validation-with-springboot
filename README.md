@@ -67,7 +67,7 @@ Spring Validation是对hibernate validation的二次封装，用于支持spring 
 
 ### 枚举类校验
 
-@ValueOfEnum：校验string可以转换为指定的枚举类
+@EnumValid：校验string可以转换为指定的枚举类
 
 ### 跨字段校验
 
@@ -77,9 +77,15 @@ Spring Validation是对hibernate validation的二次封装，用于支持spring 
 
 引入：`org.springframework.boot:spring-boot-starter-validation`
 
-### 自定义的校验无法返回将异常信息封装到BindingResult，从而导致全局异常处理器拿不到校验失败信息
+## 全局异常统一处理
 
-todo
+定义GlobalExceptionHandler类， 使用@ControllerAdvice表明这是一个异常处理类。
+
+在方法上使用@ExceptionHandler注解，当对应的异常发生时，Spring会自动调用该方法。
+
+还可以使用@ResponseStatus指定响应的状态码。
+
+自定义的校验注解，也会将异常信息封装到BindingResult的AllErrors中，在全局异常处理的时候，封装到Result中。
 
 ## 启动
 
