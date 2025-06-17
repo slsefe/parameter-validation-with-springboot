@@ -15,7 +15,8 @@ import org.example.enums.Gender;
 import org.example.validator.CreateGroup;
 import org.example.validator.PasswordValid;
 import org.example.validator.UpdateGroup;
-import org.example.validator.ValueOfEnum;
+import org.example.validator.EnumValid;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -55,10 +56,11 @@ public class UserDTO {
     @Max(value = 120, groups = {CreateGroup.class, UpdateGroup.class}, message = "年龄最大为120岁")
     private int age;
 
-    @ValueOfEnum(groups = {CreateGroup.class, UpdateGroup.class}, enumClass = Gender.class)
+    @EnumValid(groups = {CreateGroup.class, UpdateGroup.class}, enumClass = Gender.class)
     private String gender;
 
     @Past(groups = {CreateGroup.class, UpdateGroup.class}, message = "出生日期只能为过去的日期")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "yyyy-MM-dd")
     private LocalDate birthday;
 
 }

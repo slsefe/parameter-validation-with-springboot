@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = PasswordValidator.class)
 public @interface PasswordValid {
-    String message() default "两次密码不一致";
+    String message() default "2次密码必须一致";
 
     Class<?>[] groups() default {};
 

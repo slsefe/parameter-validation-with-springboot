@@ -18,10 +18,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Documented
-@Constraint(validatedBy = ValueOfEnumValidator.class)
-public @interface ValueOfEnum {
+@Constraint(validatedBy = EnumValidator.class)
+public @interface EnumValid {
     Class<? extends Enum<?>> enumClass();
-    String message() default "must be any of enum {enumClass}";
+    String message() default "输入值必须为枚举{enumClass}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
