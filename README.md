@@ -4,7 +4,11 @@ using annotation for springboot project request body, request parameter, path pa
 ## 前置知识
 
 - 创建简单的基于springboot的web项目
-- 了解restful接口设计
+- 基于restful风格的接口设计
+- 使用flyway来进行数据库脚本的版本管理
+- 使用mapstruct进行对象之间的转换
+- 使用lombok来自动生成getter、setter等方法
+- 使用Apifox插件进行接口管理（接口维护、接口文档生成）
 
 ## 目的
 对于一个应用来说，对用户请求进行校验是保证应用安全的一个重要方面。
@@ -96,4 +100,14 @@ docker run --name mysql8.1 \
 -e MYSQL_ROOT_PASSWORD=p@ssw0rd \
 -d mysql:8.1.0 \
 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+```
+
+创建schema
+```mysql
+create schema test_db;
+```
+
+启动服务
+```bash
+./gradlew bootRun
 ```
