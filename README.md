@@ -37,49 +37,56 @@ using annotation for springboot project request body, request parameter, path pa
 - 枚举：取值有效性校验
 - 分组校验（同一参数对于不同的接口来说校验规则不同）
 
-## 参数校验
+## 实现
 
-Java开发者在Java API规范 (JSR303) 定义了Bean校验的标准validation-api，但没有提供实现。
+
+### jakarta validation
+
+Java开发者在Java API规范 (JSR303) 定义了Bean校验的标准validation-api。
 
 引入依赖：`jakarta.validation:jakarta.validation-api:3.0.2`
 
 提供的注解：
-- AssertFalse, AssertTrue
-- DecimalMax, DecimalMin
-- Digits
-- Email
-- Future, FutureOrPresent, Past, PastOrPresent
-- Max, Min
-- Negative, NegativeOrZero, Positive, PositiveOrZero
-- NotNull, Null, NotEmpty, NotBlank
-- Size
+- @AssertFalse, @AssertTrue：对boolean类型字段进行校验
+- @DecimalMax, @DecimalMin：对decimal字段类型的范围进行校验
+- @Digits：对数值字段类型精细校验
+- @Email：对邮箱格式进行校验
+- @Future, @FutureOrPresent, @Past, @PastOrPresent：对日期进行校验，比如出生日期必须为过去的日期
+- @Max, @Min：对字段范围进行校验，比如年龄必须大于18岁
+- @Negative, @NegativeOrZero, @Positive, @PositiveOrZero：对数值进行校验，比如余额、年龄必须为正数
+- @NotNull, @Null, @NotEmpty, @NotBlank：可以对必填和可选参数参数进行校验
+- @Size：用于校验字符序列、集合、Map、数组中的元素个数，比如可以限制一次请求的用户数量
+- @Pattern：正则校验，比如电话号码、邮箱、用户名必须满足一定的正则规则
 
-### hibernate validation
+### Hibernate Validation
 
-hibernate validation是对这个规范的实现，并增加了校验注解如@Email、@Length等。
+hibernate validation是对`jakarta.validation-api`的一些补充，增加了一些校验注解如@Length、@URL、@UUID、@Range等。
 
 引入依赖：`org.hibernate.validator:hibernate-validator`
 
-
-### Spring的实现
+### Spring Boot Validation
 
 Spring Validation是对hibernate validation的二次封装，用于支持spring mvc参数自动校验。
 
-### 分组校验
-区分场景校验，不同场景的校验规则不同，创建用户id必须为null，更新用户id不能为null
-@Valid不再适用，只能用@Validated
+引入依赖：`org.springframework.boot:spring-boot-starter-validation`
+
+#### 分组校验
+
+用途：区分场景校验，不同场景的校验规则不同，创建用户id必须为null，更新用户id不能为null
+
+示例：对于UserDTO对象的id字段，在创建时必须为null，在更新时不能为null，就可以使用分组校验。
+
+注意：@Valid不支持分组校验，必须使用@Validated
+
+## 自定义参数校验
 
 ### 枚举类校验
 
-@EnumValid：校验string可以转换为指定的枚举类
+示例：自定义了`@EnumValid`，用于校验string可以转换为指定的枚举类
 
 ### 跨字段校验
 
-@PasswordValid：校验两次密码一致
-
-### @Valid注解不生效
-
-引入：`org.springframework.boot:spring-boot-starter-validation`
+示例：自定义了`@PasswordValid`注解和`PasswordValidator`，用于校验两次密码一致。
 
 ## 全局异常统一处理
 
@@ -94,6 +101,7 @@ Spring Validation是对hibernate validation的二次封装，用于支持spring 
 ## 启动
 
 启动mysql
+
 ```bash
 docker run --name mysql8.1 \
 -p 3306:3306 \
@@ -103,11 +111,24 @@ docker run --name mysql8.1 \
 ```
 
 创建schema
+
 ```mysql
 create schema test_db;
 ```
 
 启动服务
+
 ```bash
 ./gradlew bootRun
 ```
+
+## 总结
+
+本项目我们一共介绍了以下4种参数校验的实现：
+
+- jakarta validation api：参数校验标准API
+- hibernate validation api：提供了一些高级的校验注解
+- SpringBoot validation api：提供了分组参数校验等高级功能
+- 自定义参数校验
+
+推荐优先使用jakarta validation api，如果不能满足需求，再考虑使用其他的API。
